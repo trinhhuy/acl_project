@@ -8,12 +8,18 @@ use App\Http\Requests;
 use App\Role;
 use App\Http\Requests\RoleRequest;
 use Response;
-
+use App\Permission_Role;
+use App\Permission;
 class RoleController extends Controller
 {
 	public function index(){
         $roles = Role::all();
-        return view('admin.pages.role', array('roles' => $roles, 'menuActive' => 'role'));
+        $role_first = Role::first();
+        $role_permission = Permission_Role::permissionsOfRole($role_first->id);
+        $permissions = Permission::all();
+       //	dd($permissions);
+
+        return view('admin.pages.role', array('roles' => $roles, 'menuActive' => 'role','role_permission' => $role_permission,'permissions' => $permissions));
     }
 
     public function store(RoleRequest $request){
